@@ -3,6 +3,8 @@ import PlayerBlock from './components/PlayerBlock';
 import QueueBlock from './components/QueueBlock';
 import {createGlobalStyle } from 'styled-components';
 import React,{useState,useEffect} from 'react';
+import { MusicProvider } from './components/MusicContext';
+import { PlayingProvider } from './components/PlayingConText';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -29,12 +31,14 @@ function App() {
     
     },[playlist,playing,id])
   return (
-    <div className="App">
+    <MusicProvider>
+    <PlayingProvider>
     <GlobalStyle/>
      
     <PlayerBlock setOpen={setOpen} playing={playing} setPlaying={setPlaying} id={id} setId={setId}/> 
     <QueueBlock setOpen={setOpen} isOpen={open} musicdata={musicdata} setPlaying={setPlaying} setId={setId} id={id}/>
-    </div>
+    </PlayingProvider>
+    </MusicProvider>
   );
 }
 

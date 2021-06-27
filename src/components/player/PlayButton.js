@@ -6,6 +6,8 @@ import {FaBackward} from "react-icons/fa"
 import {FaForward} from "react-icons/fa"
 import {FaPause} from "react-icons/fa"
 import {FaPlay} from "react-icons/fa"
+import { useMusicState} from '../MusicContext';
+import { usePlayingDispatch, usePlayingState} from '../PlayingConText';
 
 const PlayBarBlock= styled.div`
     width:70%;
@@ -51,34 +53,38 @@ const DurateTime=styled.div`
 `
 
 
-function PlayBar(props) {
-    
+function PlayBar() {
+    let playlist = useMusicState()
+    const dispatch = usePlayingDispatch();
+    let currentmusic = usePlayingState()
     let [status,setStatus] = useState(true)
     let [current,setCurrent] = useState(0)
     let [durate,setDurate] = useState(0)
     let myAudio = document.getElementById("myAudio");
-    //{alert(myAudio.currentTime)}
+
      useEffect(() => {
          if(myAudio){
       myAudio.play()
          }
-  }, [props.id]);
+  }, [currentmusic,myAudio]);
    
    if(myAudio){
     myAudio.addEventListener('ended',function(){
-       let playlist = sessionStorage.getItem("playlist")
-        let playparse = JSON.parse(playlist)
-        let idx = props.id
-        setStatus(false)
-   
-      if(playparse[idx+1]!==undefined){
-      props.setPlaying(playparse[idx+1])
-      props.setId(idx+1)
-       }else if(playparse[idx+1]===undefined){
-      props.setPlaying(playparse[0])
-      props.setId(0)
-       }
-      
+       let nextmusic = playlist.find(it=>it.id===currentmusic.id+1)
+        if(nextmusic){
+            dispatch({
+      type: 'SETTING',
+      music: {
+        id: nextmusic.id,
+        src: nextmusic.src,
+        title: nextmusic.title,
+        artist:nextmusic.artist,
+        cover:nextmusic.tagCover
+      }
+    });
+        }else{
+            //alert("no music")
+        }
     });
     
    }
@@ -117,29 +123,39 @@ function PlayBar(props) {
     }
     
     const handleNext = ()=>{
-        let playlist = sessionStorage.getItem("playlist")
-        let playparse = JSON.parse(playlist)
-        let idx = props.id
-        setStatus(false)
-   
-      if(playparse[idx+1]!==undefined){
-      props.setPlaying(playparse[idx+1])
-      props.setId(idx+1)
-       }else if(playparse[0]&&playparse[idx+1]===undefined){
-      props.setPlaying(playparse[0])
-      props.setId(0)
-       }
+    let nextmusic = playlist.find(it=>it.id===currentmusic.id+1)
+        if(nextmusic){
+            dispatch({
+      type: 'SETTING',
+      music: {
+        id: nextmusic.id,
+        src: nextmusic.src,
+        title: nextmusic.title,
+        artist:nextmusic.artist,
+        cover:nextmusic.tagCover
+      }
+    });
+        }else{
+            alert("no music")
+        }
     }
     
     const handleBack = ()=>{
-        let playlist = sessionStorage.getItem("playlist")
-        let idx = props.id
-       setStatus(false)
-       if(JSON.parse(playlist)[idx-1]!==undefined){
-      props.setPlaying(JSON.parse(playlist)[idx-1])
-      props.setId(idx-1)
-
-       }
+        let backmusic = playlist.find(it=>it.id===currentmusic.id-1)
+        if(backmusic){
+            dispatch({
+      type: 'SETTING',
+      music: {
+        id: backmusic.id,
+        src: backmusic.src,
+        title: backmusic.title,
+        artist:backmusic.artist,
+        cover:backmusic.tagCover
+      }
+    });
+        }else{
+            alert("no music")
+        }
     }
     
     let progbar = document.getElementById("progressbar");
@@ -181,7 +197,7 @@ progbar.value = percent * 100;
     <div onClick={handleNext}>
     <CircleButton float={{"float":"right","width":"7.5rem","height":"7.5rem","position":"absolute","top":"50%","transform": "translate(0%, -50%)","right":"0"}} icon=<FaForward/>/>
     </div>
-    <audio id="myAudio" src={props.info.scr} preload="auto">
+    <audio id="myAudio" src={currentmusic.src} preload="auto">
     </audio>
    
     </PlayBarBlock>

@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import {usePlayingState} from '../PlayingConText';
 
 const SongInfoBox= styled.div`
     width:100%;
     height:auto;
     background:none;
     margin-top:5rem;
+    text-align:center;
 `
 const Title=styled.div`
     color:#758398;
@@ -18,17 +20,18 @@ const Artist=styled.div`
 `
 
 
-function SongInfo(props) {
+function SongInfo() {
+    let currentplay = usePlayingState()
     
   return (
       
      <div className="SongInfo">
      <SongInfoBox>
      <Title>
-     {props.title}
+     {currentplay.title}
      </Title>
      <Artist>
-     {props.artist}
+     {currentplay.artist}
      </Artist>
      </SongInfoBox>
      </div>

@@ -1,10 +1,10 @@
-import React,{useState} from 'react';
+import React from 'react';
 import jsmediatags from 'jsmediatags/dist/jsmediatags.min';
+import { useMusicDispatch, useMusicNextId } from '../MusicContext';
 
-function CircleButton(props) {
-    
-    let playlist = JSON.parse(sessionStorage.getItem("playlist"))
-    
+function CircleButton() {
+    const dispatch = useMusicDispatch();
+    const nextId = useMusicNextId();
     const handleAudio = (e)=>{
         let files = e.target.files
         for (let i = 0; i < files.length; i += 1) {
@@ -24,12 +24,18 @@ function CircleButton(props) {
             // base64 dataImage
             tagCover = `data:${tagCover.format};base64,${window.btoa(base64String)}`;
           }
-          
-    let audiodata = {"scr":src,"title":title,"artist":artist,"tagCover":tagCover}  
-    playlist.push(audiodata)
+    dispatch({
+      type: 'CREATE',
+      music: {
+        id: nextId.current,
+        src: src,
+        title: title,
+        artist:artist,
+        tagCover:tagCover
+      }
+    });
+    nextId.current += 1;
     
-    sessionStorage.setItem("playlist",JSON.stringify(playlist))
-    props.setMusicList(playlist)
   },
   onError: function(error) {
     alert(JSON.stringify(error));

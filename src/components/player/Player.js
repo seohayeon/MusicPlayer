@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {usePlayingState} from '../PlayingConText';
 
 const PlayerCdBlock = styled.div`
    width: 25rem;
@@ -18,17 +19,19 @@ const AlbumArt = styled.img`
    height:100%;
    border-radius:100rem;
    object-fit:cover;
+   background: rgb(201,112,140);
+   background: linear-gradient(0deg, rgba(201,112,140,1) 0%, rgba(173,145,194,1) 100%);
 `;
 
 
 
 function PlayerCd(props) {
+    let currentplay = usePlayingState()
     
-    //alert(props.cover)
   return (
       
      <PlayerCdBlock style={props.float}>
-     <AlbumArt src={props.cover}/>
+     <AlbumArt src={currentplay.cover}/>
         </PlayerCdBlock>
         
       );

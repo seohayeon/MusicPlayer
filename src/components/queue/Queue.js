@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import '../../App.css';
 import {FaPause} from "react-icons/fa"
 import {FaPlay} from "react-icons/fa"
-import axios from "axios"
-import Player from "../Web-Player"
+import { useMusicState } from '../MusicContext';
+import { usePlayingDispatch, usePlayingState} from '../PlayingConText';
 
 const QueueBlock = styled.div`
     margin-top:5rem;
@@ -30,34 +30,37 @@ const SongInfo = styled.div`
 `
 
 
-function Queue(props) {
-    
+function Queue() {
+    const dispatch = usePlayingDispatch();
     const [select,setSelect] = useState("")
-    let [musiclist,setMusicList] =useState([])
-    let playlist = JSON.parse(sessionStorage.getItem("playlist"))
     
-     let myAudio1 = document.getElementById("myAudio"); 
-    
-    const onChangeTitleBg = (e, id,info) => {
+    let playlist = useMusicState();
+    let playing = usePlayingState();
+
+    const onChangeTitleBg = (e, info) => {
+    let currentplay = playlist.find(it=>it.id===info.id)   
     let myAudio = document.getElementById("myAudio");    
     myAudio.play()
     e.preventDefault();
-    setSelect(id);
-    props.setMusicInfo(info)
-    props.setPlaying(info)
-    props.setId(id)
+    setSelect(info.id);
+    dispatch({
+      type: 'SETTING',
+      music: {
+        id: currentplay.id,
+        src: currentplay.src,
+        title: currentplay.title,
+        artist:currentplay.artist,
+        cover:currentplay.tagCover
+      }
+    });
+
 };
     
   useEffect(() => {
       
-      setMusicList(props.musiclist)
-      setSelect(props.id)
+      setSelect(playing.id)
       
-    if(JSON.parse(sessionStorage.getItem("playlist"))[props.id]!==undefined){
-    props.setMusicInfo(JSON.parse(sessionStorage.getItem("playlist"))[props.id])
-      }
-      
-  }, [props.musicdata,props.musiclist,props.id]);
+  }, [playing]);
    
 
     
@@ -69,12 +72,12 @@ function Queue(props) {
       
      <>
      <QueueBlock>
-      {musiclist.map((element,index) =>
+      {playlist.map((element) =>
          <div className={
-                  select === index ? "select_clicked" : "select_default"
+                  select === element.id ? "select_clicked" : "select_default"
                 }
                 
-                onClick={(e) => {onChangeTitleBg(e, index,element)}}>
+                onClick={(e) => {onChangeTitleBg(e, element)}}>
           
           <SongInfo>
          <Title>
@@ -84,12 +87,12 @@ function Queue(props) {
          {element.artist}
          </Artist>
          </SongInfo>
-         <audio id="myAudio" src={element.scr}></audio>
+         <audio id="myAudio" src={element.src}></audio>
          <div className={
-                  select === index ? "button_clicked" : "button_default"
+                  select === element.id ? "button_clicked" : "button_default"
                 }>
                 {
-                select === index ? 
+                select === element.id ? 
                 <div className="icon">
                 <FaPause/>
                 </div> 

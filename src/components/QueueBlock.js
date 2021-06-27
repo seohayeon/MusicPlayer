@@ -2,9 +2,10 @@ import {createGlobalStyle } from 'styled-components';
 import CdBlock from './player/Player';
 import QueueBlock from './queue/Queue';
 import AddMusic from './queue/AddMusic';
-import React,{useState,useEffect} from 'react';
+import React,{useEffect} from 'react';
 import CircleButton from './player/BackButton';
 import '../App.css';
+import {IoMdArrowRoundBack} from "react-icons/io"
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -19,9 +20,7 @@ const GlobalStyle = createGlobalStyle`
 
 function Queue(props) {
    
-  
-  const [musicinfo,setMusicInfo] = useState("")
-  const [musiclist,setMusicList] = useState([])
+ 
   const handleCategory = ()=> {
         props.setOpen("close")
     }
@@ -35,12 +34,12 @@ function Queue(props) {
        <GlobalStyle/>
     <div className={props.isOpen === "open" ? "QueueBlockOpen" : "QueueBlock"}>
     <div onClick={handleCategory}>
-    <CircleButton/>
+    <CircleButton float={{"margin-top":"1rem","margin-left":"1rem"}} icon=<IoMdArrowRoundBack/>/>
     </div>
-    <CdBlock float={{"width":"20rem","height":"20rem","display":"inline-block"}} cover = {musicinfo.tagCover}/>
-     <AddMusic float={{"float":"right"}} setMusicList={setMusicList}/>
+    <CdBlock float={{"width":"20rem","height":"20rem","margin-top":"1rem"}}/>
+     <AddMusic/>
      
-    <QueueBlock setMusicInfo={setMusicInfo} musicdata={props.musicdata} setPlaying={props.setPlaying} musiclist={musiclist} setId={props.setId} id={props.id}/>
+    <QueueBlock/>
     
     </div>
     </>
