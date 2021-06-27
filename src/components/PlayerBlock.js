@@ -31,7 +31,6 @@ function PlayerBlock(props) {
      </Top>
       <CdBlock cover={props.playing.tagCover}/>
       <SongInfo title={title} artist={artist}/>
-      <RangeBar/>
       <PlayButton info={props.playing} setPlaying={props.setPlaying} id={props.id} setId={props.setId}/>
       
     </div>

@@ -7,9 +7,11 @@ import axios from "axios"
 import Player from "../Web-Player"
 
 const QueueBlock = styled.div`
-    margin-top:6rem;
-    margin-left:2rem;
-    margin-right:2rem;
+    margin-top:5rem;
+    padding-left:2rem;
+    padding-right:2rem;
+    height:55%;
+    overflow:scroll;
 `
 const Title = styled.div`
     margin-left:1rem;

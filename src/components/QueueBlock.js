@@ -39,7 +39,9 @@ function Queue(props) {
     </div>
     <CdBlock float={{"width":"20rem","height":"20rem","display":"inline-block"}} cover = {musicinfo.tagCover}/>
      <AddMusic float={{"float":"right"}} setMusicList={setMusicList}/>
-    <QueueBlock setMusicInfo={setMusicInfo} musicdata={props.musicdata} setPlaying={props.setPlaying} musiclist={musiclist} setId={props.setId} id={props.id}/> 
+     
+    <QueueBlock setMusicInfo={setMusicInfo} musicdata={props.musicdata} setPlaying={props.setPlaying} musiclist={musiclist} setId={props.setId} id={props.id}/>
+    
     </div>
     </>
   );

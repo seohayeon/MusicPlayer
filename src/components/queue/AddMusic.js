@@ -6,7 +6,9 @@ function CircleButton(props) {
     let playlist = JSON.parse(sessionStorage.getItem("playlist"))
     
     const handleAudio = (e)=>{
-        let file = e.target.files[0]
+        let files = e.target.files
+        for (let i = 0; i < files.length; i += 1) {
+        let file = e.target.files[i]
        const urlObj = URL.createObjectURL(file);
         let src = urlObj
         
@@ -34,10 +36,11 @@ function CircleButton(props) {
   }
 });
     }
+    }
           
   return (
       <>
-<input id="audio-upload" type="file" onChange={handleAudio}/>
+<input id="audio-upload" type="file" onChange={handleAudio} multiple="multiple"/>
 
         </>
         
