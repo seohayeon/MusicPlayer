@@ -97,3 +97,72 @@ background: radial-gradient(circle, rgba(152,169,255,0.9055555555555556) 0%, rgb
     height:100vh;
     background-repeat:no-repeat;
 }
+.setstatus{
+    position:relative;
+}
+.shuffle_clicked{
+    width:3.5rem;
+    height:3.5rem;
+    background:white;
+    border-radius:100%;
+    background: rgb(152,169,255);
+background: radial-gradient(circle, rgba(152,169,255,0.9055555555555556) 0%, rgba(67,113,255,1) 100%);
+    box-shadow:  19px 19px 38px #9096a0,
+             -19px -19px 38px #ffffff;
+    float:right;
+    color:white;
+    padding:0.45rem;
+    position:absolute;
+    right:0%;
+    top:50%;
+    transform:translate(0%, -50%);
+}
+.shuffle_default{
+    width:3.5rem;
+    height:3.5rem;
+    background:white;
+    border-radius:100%;
+    background: linear-gradient(145deg, #eef7ff, #c8d0dd);
+    box-shadow:  19px 19px 38px #9096a0,
+             -19px -19px 38px #ffffff;
+    overflow:hidden;         
+    padding:0.45rem;
+    position:absolute;
+    float:right;
+    right:0%;
+    top:50%;
+    transform:translate(0%, -50%);
+}
+.loop_default{
+    width:3.5rem;
+    height:3.5rem;
+    background:white;
+    border-radius:100%;
+    background: linear-gradient(145deg, #eef7ff, #c8d0dd);
+    box-shadow:  19px 19px 38px #9096a0,
+             -19px -19px 38px #ffffff;
+    overflow:hidden;         
+    padding:0.45rem;
+    position:absolute;
+    float:left;
+    left:0%;
+    top:50%;
+    transform:translate(0%, -50%);
+}
+.loop_clicked{
+    width:3.5rem;
+    height:3.5rem;
+    background:white;
+    border-radius:100%;
+    background: rgb(152,169,255);
+background: radial-gradient(circle, rgba(152,169,255,0.9055555555555556) 0%, rgba(67,113,255,1) 100%);
+    box-shadow:  19px 19px 38px #9096a0,
+             -19px -19px 38px #ffffff;
+    float:left;
+    color:white;
+    padding:0.45rem;
+    position:absolute;
+    left:0%;
+    top:50%;
+    transform:translate(0%, -50%);
+}

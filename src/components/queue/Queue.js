@@ -53,7 +53,7 @@ function Queue() {
         cover:currentplay.tagCover
       }
     });
-
+   // alert(JSON.stringify(currentplay))
 };
     
   useEffect(() => {

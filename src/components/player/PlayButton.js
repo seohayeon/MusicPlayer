@@ -1,4 +1,5 @@
 import React,{useState, useEffect} from 'react';
+import '../../App.css';
 import styled from 'styled-components';
 import CircleButton from './BackButton';
 import BlueButton from './BlueButton';
@@ -6,6 +7,8 @@ import {FaBackward} from "react-icons/fa"
 import {FaForward} from "react-icons/fa"
 import {FaPause} from "react-icons/fa"
 import {FaPlay} from "react-icons/fa"
+import {TiArrowLoop} from "react-icons/ti"
+import {FiShuffle} from "react-icons/fi"
 import { useMusicState} from '../MusicContext';
 import { usePlayingDispatch, usePlayingState} from '../PlayingConText';
 
@@ -65,13 +68,27 @@ function PlayBar() {
      useEffect(() => {
          if(myAudio){
       myAudio.play()
+      setStatus(myAudio.paused)
          }
-  }, [currentmusic,myAudio]);
+  }, [myAudio,currentmusic]);
+  
+   
+   let [shuffle, setShuffle] = useState(false)
+     const handleShuffle = () =>{
+        if(myAudio){
+        if(shuffle===false){
+        setShuffle(true)
+        }else{
+        setShuffle(false)
+        }}
+    }
    
    if(myAudio){
     myAudio.addEventListener('ended',function(){
-       let nextmusic = playlist.find(it=>it.id===currentmusic.id+1)
-        if(nextmusic){
+        let nextmusic = playlist.find(it=>it.id===currentmusic.id+1)
+        setStatus(true)
+    
+        if(nextmusic&&shuffle===false){
             dispatch({
       type: 'SETTING',
       music: {
@@ -80,6 +97,20 @@ function PlayBar() {
         title: nextmusic.title,
         artist:nextmusic.artist,
         cover:nextmusic.tagCover
+      }
+    });
+        }else if(shuffle===true){
+    const randomid = Math.floor(Math.random() * playlist.length)
+    let shuffleMusic = playlist[randomid]
+    
+            dispatch({
+      type: 'SETTING',
+      music: {
+        id: shuffleMusic.id,
+        src: shuffleMusic.src,
+        title: shuffleMusic.title,
+        artist:shuffleMusic.artist,
+        cover:shuffleMusic.tagCover
       }
     });
         }else{
@@ -111,20 +142,23 @@ function PlayBar() {
 
 
     const handleMusic = ()=>{
+        
         if(myAudio){
         if(status===false){
         myAudio.pause()
         setStatus(myAudio.paused)
+    
         }else if(status===true){
             myAudio.play()
             setStatus(myAudio.paused)
+
         }
         }
     }
     
     const handleNext = ()=>{
     let nextmusic = playlist.find(it=>it.id===currentmusic.id+1)
-        if(nextmusic){
+        if(nextmusic&&shuffle===false){
             dispatch({
       type: 'SETTING',
       music: {
@@ -135,6 +169,22 @@ function PlayBar() {
         cover:nextmusic.tagCover
       }
     });
+    setStatus(myAudio.paused)
+        }else if(shuffle===true){
+    const randomid = Math.floor(Math.random() * playlist.length)
+    let shuffleMusic = playlist[randomid]
+    
+            dispatch({
+      type: 'SETTING',
+      music: {
+        id: shuffleMusic.id,
+        src: shuffleMusic.src,
+        title: shuffleMusic.title,
+        artist:shuffleMusic.artist,
+        cover:shuffleMusic.tagCover
+      }
+    });
+    setStatus(myAudio.paused)
         }else{
             alert("no music")
         }
@@ -153,6 +203,7 @@ function PlayBar() {
         cover:backmusic.tagCover
       }
     });
+    
         }else{
             alert("no music")
         }
@@ -174,7 +225,19 @@ progbar.value = percent * 100;
 }
 }
     }
+    let [loop, setLoop] = useState(false)
+     const handleLoop = () =>{
+        if(myAudio){
+        if(loop===false){
+        myAudio.loop=true
+        setLoop(true)
+        }else{
+        myAudio.loop=false
+        setLoop(false)
+        }}
+    }
     
+     
   return (
      <>
       <Time>
@@ -187,16 +250,51 @@ progbar.value = percent * 100;
     </RangeBarBlock>
     
     <PlayBarBlock>
+     
+     
     <div onClick={handleBack}>
-    <CircleButton float={{"float":"left","width":"7.5rem","height":"7.5rem","position":"absolute","top":"50%","transform": "translate(0%, -50%)"}} icon =<FaBackward/>/>
+    <CircleButton float={{"float":"left","width":"7.5rem","height":"7.5rem","position":"absolute","top":"50%","transform": "translate(0%, -50%)","margin-left":"6rem"}} icon =<FaBackward/>/>
     </div>
+    
+<div className={
+loop === true? "loop_clicked" : "loop_default"
+} onClick={handleLoop}>
+{
+loop === true ? 
+<div className="icon" style={{"font-size":"2rem"}}>
+<TiArrowLoop/>
+</div> 
+: <div className="inlineButton">
+<div className="icon" style={{"font-size":"2rem"}}>
+<TiArrowLoop style={{"color":"#A7B6CD"}}/>
+</div>
+</div>
+}
+</div>
+<div onClick={handleNext}>
+    <CircleButton float={{"float":"right","width":"7.5rem","height":"7.5rem","position":"absolute","top":"50%","transform": "translate(0%, -50%)","right":"0","margin-right":"6rem"}} icon=<FaForward/>/>
+    </div>
+  
     <div onClick={handleMusic}>
     <BlueButton float={{"display":"inline-block","width":"11rem","height":"11rem"}} icon=
     {status === false ? <FaPause/> : <FaPlay/>}/>
     </div>
-    <div onClick={handleNext}>
-    <CircleButton float={{"float":"right","width":"7.5rem","height":"7.5rem","position":"absolute","top":"50%","transform": "translate(0%, -50%)","right":"0"}} icon=<FaForward/>/>
-    </div>
+   <div className={
+shuffle === true? "shuffle_clicked" : "shuffle_default"
+} onClick={handleShuffle}>
+{
+shuffle === true ? 
+<div className="icon" style={{"font-size":"2rem"}}>
+<FiShuffle/>
+</div> 
+: <div className="inlineButton">
+<div className="icon" style={{"font-size":"2rem"}}>
+<FiShuffle style={{"color":"#A7B6CD"}}/>
+</div>
+</div>
+}
+</div>
+    
     <audio id="myAudio" src={currentmusic.src} preload="auto">
     </audio>
    
