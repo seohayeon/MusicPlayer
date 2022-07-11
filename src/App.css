@@ -1,0 +1,120 @@
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: 100;
+  src: url("./fonts/NotoSansKR-Light.woff2") format('woff2'),
+  url("./fonts/NotoSansKR-Light.woff") format('woff'),
+  url("./fonts/NotoSansKR-Light.otf") format('truetype')
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: normal;
+  src: url("./fonts/NotoSansKR-Regular.woff2") format('woff2'),
+  url("./fonts/NotoSansKR-Regular.woff") format('woff'),
+  url("./fonts/NotoSansKR-Regular.otf") format('truetype')
+}
+
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: 500;
+  src: url("./fonts/NotoSansKR-Medium.woff2") format('woff2'),
+  url("./fonts/NotoSansKR-Medium.woff") format('woff'),
+  url("./fonts/NotoSansKR-Medium.otf") format('truetype')
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: bold;
+  src: url("./fonts/NotoSansKR-Bold.woff2") format('woff2'),
+  url("./fonts/NotoSansKR-Bold.woff") format('woff'),
+  url("./fonts/NotoSansKR-Bold.otf") format('truetype')
+}
+
+@font-face {
+font-family: "Roboto Regular";
+font-weight: 400;
+src: url("./fonts/Roboto-Regular.ttf") format("truetype");
+}
+
+@font-face {
+font-family: "Roboto Medium";
+font-weight: 500;
+src: url("./fonts/Roboto-Medium.ttf") format("truetype");
+}
+
+@font-face {
+font-family: "Roboto Bold";
+font-weight: 700;
+src: url("./fonts/Roboto-Bold.ttf") format("truetype");
+}
+
+.select_default{
+    width:100%;
+    height:6.5rem;
+    text-align:left;
+    position: relative;
+}
+.select_clicked{
+    width:100%;
+    height:6.5rem;
+    text-align:left;
+    border-radius: 21px;
+    position: relative;
+    background: rgb(206,219,241);
+    background: linear-gradient(180deg, rgba(206,219,241,1) 0%, rgba(213,226,247,1) 40%);
+}
+.button_default{
+    width:3rem;
+    height:3rem;
+    background:white;
+    border-radius:100%;
+    background: linear-gradient(145deg, #eef7ff, #c8d0dd);
+    overflow:hidden;         
+    padding:0.45rem;
+    display:inline;
+    float:right;
+    position:absolute;
+    right:0%;
+    top:50%;
+    transform:translate(-50%, -50%);
+}
+.button_clicked{
+    width:3rem;
+    height:3rem;
+    background:white;
+    border-radius:100%;
+    background: rgb(152,169,255);
+background: radial-gradient(circle, rgba(152,169,255,0.9055555555555556) 0%, rgba(67,113,255,1) 100%);
+    display:inline;
+    float:right;
+    color:white;
+    padding:0.45rem;
+    position:absolute;
+    right:0%;
+    top:50%;
+    transform:translate(-50%, -50%);
+}
+.inlineButton{
+    position: relative;
+    background:#E8F0FB;
+    object-fit:cover;
+    border-radius:100rem;
+    width:100%;
+    height:100%;
+    box-shadow: 0 0 6px 2px #fff;
+}
+.icon{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+}
+input[type="file"]{
+    display: none;
+}
+
