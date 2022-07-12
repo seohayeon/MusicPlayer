@@ -1,18 +1,11 @@
 import jsmediatags from 'jsmediatags/dist/jsmediatags.min';
-import {Music} from '../util/database'
-const MusicDB = new Music()
 
-export function handleFile(e){
-        let files = e.target.files
+
+export function handleFile(files,dispatch,nextId){
         for (let i = 0; i < files.length; i += 1) {
             let file = files[i]
-            jsMediaTag(file)
-    }
-}
-
-
-function jsMediaTag(file){
-    jsmediatags.read(file, {
+            
+            jsmediatags.read(file, {
             onSuccess: function(tag) {
                 const urlObj = URL.createObjectURL(file);
                 let title = tag.tags.title;
@@ -25,14 +18,28 @@ function jsMediaTag(file){
                     const coverImage = new Image();
                     coverImage.src = `data:${tagCover.format};base64,${window.btoa(base64String)}`;
                     let blobUrl = b64toBlob(coverImage.src)
-                    MusicDB.add(title,artist,blobUrl,urlObj)
+                    dispatch({
+                        type: 'CREATE',
+                        music: {
+                            id: nextId.current,
+                            title: title,
+                            artist:artist,
+                            tagCover:blobUrl,
+                            src: urlObj,
+                        }
+                    });
+                    nextId.current += 1;
                 }
             },
             onError: function(error) {
                 
             }
     });
+    
+    }
 }
+
+
 
 
 

@@ -1,4 +1,4 @@
-import React,{useState,useEffect,useRef} from "react";
+import React,{useState,useEffect,useRef,} from "react";
 import ReactDOM from "react-dom";
 import styled from 'styled-components'
 import ArtworkAtom from '../atom/ArtworkAtom'
@@ -10,7 +10,7 @@ import SmallBlueButton from '../atom/SmallBlueButton'
 import {FaPause,FaPlay} from "react-icons/fa"
 import {TbRepeatOnce,TbRepeat} from "react-icons/tb"
 import {ImShuffle} from "react-icons/im"
-
+import { usePlayListState } from '../../PlayListContext';
 import { useMusicState,useMusicDispatch } from '../../MusicContext';
 import {Music} from '../../util/database'
 const MusicDB = new Music()
@@ -42,7 +42,7 @@ const QueueTop = styled.div`
 
 function QueueModal(props){
     const { open, close, header } = props;
-    const [playlist,setPlayList] = useState([])
+    const playlist = usePlayListState()
     const [select,setSelect] = useState()
     let musics = useMusicState()
     const dispatch = useMusicDispatch();
@@ -50,14 +50,10 @@ function QueueModal(props){
     
     
     useEffect(async () => {
-        setPlayList(await MusicDB.findAll())
         props.setAudio(audioRef)
         setSelect(musics.id)
-    }, [playlist,musics]);
+    }, [musics,audioRef]);
     
-    window.addEventListener('beforeunload', function(event) {
-        MusicDB.clear()
-    });
     
     
     const onChangeMusic = async (e, info,i) => {
@@ -65,60 +61,54 @@ function QueueModal(props){
         dispatch({
             type: 'CHANGE',
             music: {
-                id:info._id,
-                index:i,
+                id:info.id,
                 title:info.title,
                 artist:info.artist,
                 artwork:info.artwork
             }
         });
-        let src = await MusicDB.getAudio(info._id)
+        let src = playlist.find(e=>e.id === info.id).src
         audioRef.current.src = src;
         audioRef.current.load();
-        audioRef.current.play();
+        audioRef.current.play()
     };
     let [loop,setLoop] = useState(0);
     let [shuffle,setShuffle] = useState(false);
-    let [shufflePl,setShufflePl] = useState([])
     
     const handleOnEnded = async () =>{
-            let pl = shuffle?shufflePl:playlist
-            let index = musics.index + 1
-            let info = pl[index]
+            let index = playlist.findIndex((e) => e.id==musics.id) + 1;
+            let info = playlist[index]
             if(loop==1) return;
             if(loop==2&&!info){
-                        let m = pl[0]
+                        let m = playlist[0]
                         dispatch({
                             type: 'CHANGE',
                             music: {
-                                id:m._id,
-                                 index:0,
+                                id:m.id,
                                 title:m.title,
                                 artist:m.artist,
                                 artwork:m.artwork
                             }
                         });
-                        let src = await MusicDB.getAudio(m._id)
-                        audioRef.current.src = src;
+                        audioRef.current.src = m.src;
                         audioRef.current.load();
-                        audioRef.current.play();
+                        audioRef.current.play()
                         return
             }
             if(loop!==2&&!info) return;
             dispatch({
             type: 'CHANGE',
                 music: {
-                    id:info._id,
-                    index:index,
+                    id:info.id,
                     title:info.title,
                     artist:info.artist,
                     artwork:info.artwork
                 }
             });
-            let src = await MusicDB.getAudio(info._id)
+            let src = playlist.find(e=>e.id === info.id).src
             audioRef.current.src = src;
             audioRef.current.load();
-            audioRef.current.play();
+            audioRef.current.play()
     }
     
     
@@ -137,22 +127,18 @@ function QueueModal(props){
     
     const handleShuffle = () => {
         if(shuffle){
-            setShuffle(false)
+                setShuffle(false)
+                playlist.sort(function(a, b) { 
+                return a['id'] - b['id'];
+            });
         }else{
             setShuffle(true)
-            setShufflePl(shuffleArray(playlist))
+            shuffleArray(playlist)
         }
     }
-    function shuffleArray(array) {
-        let currentIndex = array.length,  randomIndex;
-        while (currentIndex != 0) {
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-            [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]];
-        }
-        return array;
-    }
+    
+    
+    
     
   return (
         <div className={open ? 'openModal modal' : 'modal'}>
@@ -186,16 +172,15 @@ function QueueModal(props){
                 
                 <QueueBlock>
                     {playlist.map((element,i) =>
-                        <div className={ select === element._id ? "select_clicked" : "select_default" }
+                        <div className={ select === element.id ? "select_clicked" : "select_default" }
                             onClick={(e) => {
                             onChangeMusic(e, element,i)}}>
                             <QueueButton title={element.title}           artist={element.artist}/>
-                    { select === element._id ? 
+                    { select === element.id ? 
                             <SmallBlueButton icon={<FaPause/>}/>: 
                             <SmallBasicButton icon={<FaPlay/>}/> }
                     </div>
                 )}
-        
                 </QueueBlock>
             
             </GlobalStyle>
@@ -209,6 +194,15 @@ function QueueModal(props){
     )
 };
 
-
+function shuffleArray(array) {
+        let currentIndex = array.length,  randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
 
 export default QueueModal

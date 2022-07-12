@@ -20,7 +20,9 @@ const GlobalStyle = createGlobalStyle`
 
 function App(){
     const [audio,setAudio] = useState()
+    const [meta,setMeta] = useState()
     
+            
   return (
       <PlayListProvider>
       <MusicProvider>

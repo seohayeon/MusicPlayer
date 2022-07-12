@@ -8,7 +8,6 @@ function PlayListReducer(state, action) {
       return state.concat(action.PlayList);
     case 'REMOVE':
       return state.filter(PlayList => PlayList.id !== action.id);
-      
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

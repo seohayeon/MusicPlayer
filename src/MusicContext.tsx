@@ -1,10 +1,13 @@
 import React, { useReducer, createContext, useContext } from 'react';
-
-const initialMusic = {title:'-----',artist:'---',artwork:'https://i.pinimg.com/736x/c7/14/74/c714748d5e5387e1968a175ee4639252.jpg'};
+import { usePlayListState } from './PlayListContext'
+const initialMusic = {title:'-----',artist:'---',artwork:'/images/unknown_music.png'}
+const MusicStateContext = createContext();
+const MusicDispatchContext = createContext();
 
 function musicReducer(state, action) {
   switch (action.type) {
     case 'CHANGE':
+        let playlist = usePlayListState()
         if ("mediaSession" in navigator) {
             navigator.mediaSession.metadata = new MediaMetadata({
             title: action.music.title,
@@ -15,15 +18,12 @@ function musicReducer(state, action) {
             });
         }
       return state = action.music;
-    case 'TOGGLE':
-      return state;
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
 }
 
-const MusicStateContext = createContext();
-const MusicDispatchContext = createContext();
+
 
 
 export function MusicProvider({ children }:React.ReactNode) {

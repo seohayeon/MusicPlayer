@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import styled from 'styled-components';
 import ArtworkAtom from '../atom/ArtworkAtom'
 import { useMusicState } from '../../MusicContext';
@@ -22,6 +22,12 @@ const Artist = styled.div`
 
 function MusicInfoBlock(props) {
   const musics = useMusicState()
+  const [music,setMusic] = useState(musics)
+  
+  useEffect( () => {
+        setMusic(musics)
+  }, [musics]);
+  
   return (
         <div>
         <ArtworkAtom img={musics.artwork}/>

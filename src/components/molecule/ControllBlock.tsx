@@ -4,8 +4,7 @@ import LargeBlueButton from '../atom/LargeBlueButton'
 import LargeBasicButton from '../atom/LargeBasicButton'
 import {FaBackward,FaForward,FaPause,FaPlay} from "react-icons/fa"
 import { useMusicState,useMusicDispatch } from '../../MusicContext';
-import {Music} from '../../util/database'
-const MusicDB = new Music()
+import { usePlayListState } from '../../PlayListContext';
 
 const ControllBlokDiv= styled.div`
     display: flex;
@@ -14,10 +13,11 @@ const ControllBlokDiv= styled.div`
 `
 
 function ControllBlock(props) {
-    let { audio } = props
+    let { audio,setMeta } = props
     let [paused,setPaused] = useState(true)
     let musics = useMusicState()
     const dispatch = useMusicDispatch();
+    let playlist = usePlayListState()
     
     useEffect(() => {
         audio?.current?.addEventListener("pause", function(){ 
@@ -26,8 +26,8 @@ function ControllBlock(props) {
         audio?.current?.addEventListener("play", function(){ 
             setPaused(false)
         })
+        
     }, [audio]);
-                
     
     
     const handlePause = () =>{
@@ -38,44 +38,40 @@ function ControllBlock(props) {
         }
     }
     const handleNext = async () => {
-            let index = musics.index + 1
-            let playlist = await MusicDB.findAll()
-            let info = playlist[index]
+            let index = playlist.findIndex((e) => e.id == musics.id);
+            let info = playlist[index+1]
             if(!info) return;
             dispatch({
             type: 'CHANGE',
                 music: {
-                    id:info._id,
-                    index:index,
+                    id:info.id,
                     title:info.title,
                     artist:info.artist,
                     artwork:info.artwork
                 }
             });
-            let src = await MusicDB.getAudio(info._id)
+            let src = playlist.find(e=>e.id === info.id).src
             audio.current.src = src;
             audio.current.load();
-            audio.current.play();
+            audio.current.play()
     }
     const handlePrev = async () => {
-            let index = musics.index - 1
-            let playlist = await MusicDB.findAll()
-            let info = playlist[index]
+            let index = playlist.findIndex((e) => e.id==musics.id);
+            let info = playlist[index - 1]
             if(!info) return;
             dispatch({
             type: 'CHANGE',
                 music: {
-                    id:info._id,
-                    index:index,
+                    id:info.id,
                     title:info.title,
                     artist:info.artist,
                     artwork:info.artwork
                 }
             });
-            let src = await MusicDB.getAudio(info._id)
+            let src = playlist.find(e=>e.id === info.id).src
             audio.current.src = src;
             audio.current.load();
-            audio.current.play();
+            audio.current.play()
     }
     
   return (
