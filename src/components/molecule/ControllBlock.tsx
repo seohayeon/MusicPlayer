@@ -26,7 +26,6 @@ function ControllBlock(props) {
         audio?.current?.addEventListener("play", function(){ 
             setPaused(false)
         })
-        
     }, [audio]);
     
     
@@ -54,6 +53,7 @@ function ControllBlock(props) {
             audio.current.src = src;
             audio.current.load();
             audio.current.play()
+            updateMediaData(info)
     }
     const handlePrev = async () => {
             let index = playlist.findIndex((e) => e.id==musics.id);
@@ -72,6 +72,59 @@ function ControllBlock(props) {
             audio.current.src = src;
             audio.current.load();
             audio.current.play()
+            updateMediaData(info)
+    }
+    
+    const updateMediaData = (m) => {
+        if ("mediaSession" in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+            title: m.title,
+            artist: m.artist,
+            artwork: [
+                { src: m.artwork, sizes: '128x128', type: 'image/png' }
+                ]
+            });
+            navigator.mediaSession.setActionHandler('previoustrack', function() {
+                
+                let index = playlist.findIndex((e) => e.id==m.id);
+                let info = playlist[index - 1]
+                if(!info) return;
+                dispatch({
+                    type: 'CHANGE',
+                    music: {
+                        id:info.id,
+                        title:info.title,
+                        artist:info.artist,
+                        artwork:info.artwork
+                    }
+                });
+                let src = playlist.find(e=>e.id === info.id).src
+                audio.current.src = src;
+                audio.current.load();
+                audio.current.play()
+                updateMediaData(info)
+            
+            });
+            navigator.mediaSession.setActionHandler('nexttrack', function() {
+                let index = playlist.findIndex((e) => e.id==m.id);
+                let info = playlist[index + 1]
+                if(!info) return;
+                dispatch({
+                    type: 'CHANGE',
+                    music: {
+                        id:info.id,
+                        title:info.title,
+                        artist:info.artist,
+                        artwork:info.artwork
+                    }
+                });
+                let src = playlist.find(e=>e.id === info.id).src
+                audio.current.src = src;
+                audio.current.load();
+                audio.current.play()
+                updateMediaData(info)
+            });
+        }
     }
     
   return (

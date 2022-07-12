@@ -8,15 +8,6 @@ function musicReducer(state, action) {
   switch (action.type) {
     case 'CHANGE':
         let playlist = usePlayListState()
-        if ("mediaSession" in navigator) {
-            navigator.mediaSession.metadata = new MediaMetadata({
-            title: action.music.title,
-            artist: action.music.artist,
-            artwork: [
-                { src: action.music.artwork, sizes: '128x128', type: 'image/png' }
-                ]
-            });
-        }
       return state = action.music;
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

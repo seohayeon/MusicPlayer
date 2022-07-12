@@ -54,7 +54,57 @@ function QueueModal(props){
         setSelect(musics.id)
     }, [musics,audioRef]);
     
-    
+    const updateMediaData = (m) => {
+        if ("mediaSession" in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+            title: m.title,
+            artist: m.artist,
+            artwork: [
+                { src: m.artwork, sizes: '128x128', type: 'image/png' }
+                ]
+            });
+            navigator.mediaSession.setActionHandler('previoustrack', function() {
+                
+                let index = playlist.findIndex((e) => e.id==m.id);
+                let info = playlist[index - 1]
+                if(!info) return;
+                dispatch({
+                    type: 'CHANGE',
+                    music: {
+                        id:info.id,
+                        title:info.title,
+                        artist:info.artist,
+                        artwork:info.artwork
+                    }
+                });
+                let src = playlist.find(e=>e.id === info.id).src
+                audioRef.current.src = src;
+                audioRef.current.load();
+                audioRef.current.play()
+                updateMediaData(info)
+            
+            });
+            navigator.mediaSession.setActionHandler('nexttrack', function() {
+                let index = playlist.findIndex((e) => e.id==m.id);
+                let info = playlist[index + 1]
+                if(!info) return;
+                dispatch({
+                    type: 'CHANGE',
+                    music: {
+                        id:info.id,
+                        title:info.title,
+                        artist:info.artist,
+                        artwork:info.artwork
+                    }
+                });
+                let src = playlist.find(e=>e.id === info.id).src
+                audioRef.current.src = src;
+                audioRef.current.load();
+                audioRef.current.play()
+                updateMediaData(info)
+            });
+        }
+    }
     
     const onChangeMusic = async (e, info,i) => {
         e.preventDefault();
@@ -71,6 +121,7 @@ function QueueModal(props){
         audioRef.current.src = src;
         audioRef.current.load();
         audioRef.current.play()
+        updateMediaData(info)
     };
     let [loop,setLoop] = useState(0);
     let [shuffle,setShuffle] = useState(false);
@@ -93,6 +144,7 @@ function QueueModal(props){
                         audioRef.current.src = m.src;
                         audioRef.current.load();
                         audioRef.current.play()
+                        updateMediaData(m)
                         return
             }
             if(loop!==2&&!info) return;
@@ -109,8 +161,8 @@ function QueueModal(props){
             audioRef.current.src = src;
             audioRef.current.load();
             audioRef.current.play()
+            updateMediaData(info)
     }
-    
     
     const handleLoop = () => {
         if(loop==0){

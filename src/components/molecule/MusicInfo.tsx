@@ -30,9 +30,9 @@ function MusicInfoBlock(props) {
   
   return (
         <div>
-        <ArtworkAtom img={musics.artwork}/>
-        <Title>{musics.title}</Title>
-        <Artist>{musics.artist}</Artist>
+        <ArtworkAtom id='artwork' img={musics.artwork}/>
+        <Title id='title'>{musics.title}</Title>
+        <Artist id='artist'>{musics.artist}</Artist>
         
         </div>
       );
