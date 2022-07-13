@@ -124,6 +124,14 @@ function ControllBlock(props) {
                 audio.current.play()
                 updateMediaData(info)
             });
+            navigator.mediaSession.setActionHandler('seekbackward', function() {
+                let currentTime = audio.current.currentTime
+                audio.current.currentTime = audio.current.currentTime - 5 
+            });
+            navigator.mediaSession.setActionHandler('seekforward', function() {
+                let currentTime = audio.current.currentTime
+                audio.current.currentTime = audio.current.currentTime + 5 
+            });
         }
     }
     

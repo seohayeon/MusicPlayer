@@ -103,6 +103,15 @@ function QueueModal(props){
                 audioRef.current.play()
                 updateMediaData(info)
             });
+            navigator.mediaSession.setActionHandler('seekbackward', function() {
+                let currentTime = audioRef.current.currentTime
+                audioRef.current.currentTime = audioRef.current.currentTime - 5 
+            });
+            navigator.mediaSession.setActionHandler('seekforward', function() {
+                let currentTime = audioRef.current.currentTime
+                audioRef.current.currentTime = audioRef.current.currentTime + 5 
+            });
+  
         }
     }
     
