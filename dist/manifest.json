@@ -1,0 +1,20 @@
+{
+  "short_name": "Music Player",
+  "name": "Music Player",
+  "icons": [
+    {
+      "src": "icon192.jpg",
+      "type": "image/jpeg",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon512.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
