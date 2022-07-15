@@ -40,6 +40,7 @@ const QueueBlock = styled.div`
     width:43rem;
     overflow:scroll;
     color:${(props) => props.color[1]?`rgb(${String(props.color[1])})`:'#758398'};
+    height:calc(100vh - 28rem);
 `
 const QueueTop = styled.div`
     display: flex;
