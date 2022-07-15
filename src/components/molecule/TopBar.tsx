@@ -40,8 +40,8 @@ function TopBarBlock(props) {
             jsmediatags.read(file, {
             onSuccess: function(tag) {
                 const urlObj = URL.createObjectURL(file);
-                let title = tag.tags.title;
-                let artist = tag.tags.artist;
+                let title = tag.tags.title?tag.tags.title:'제목이 없는 음원';
+                let artist = tag.tags.artist?tag.tags.artist:'제목이 없는 아티스트';
                 let tagCover = tag.tags.picture;
     
                 if (tagCover) {
@@ -61,6 +61,18 @@ function TopBarBlock(props) {
                         });
                         nextId.current += 1;
                     
+                }else{
+                    dispatch({
+                            type: 'CREATE',
+                            PlayList: {
+                                id: nextId.current,
+                                title: title,
+                                artist:artist,
+                                artwork:'/images/unknown_music.png',
+                                src: urlObj,
+                            }   
+                        });
+                    nextId.current += 1;
                 }
             },
             onError: function(error) {
