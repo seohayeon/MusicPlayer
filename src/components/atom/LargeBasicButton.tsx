@@ -1,19 +1,20 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import styled from 'styled-components';
+import { ColorContext } from '../../ColorContext';
+import { Util } from '../../util/util';
 
 const CircleButtonBlock= styled.div`
     width:9rem;
     height:9rem;
-    background:white;
     border-radius:100%;
-    background: linear-gradient(145deg, #eef7ff, #c8d0dd);
-    box-shadow:  19px 19px 38px #9096a0,
-             -19px -19px 38px #ffffff;
+    background: rgb(${(props) => String(props.color[0])});
+    box-shadow:  10px 10px 20px rgb(${(props) => String(Util.colorLuminance(props.color[0],-0.3))}),
+             -10px -10px 20px rgb(${(props) => String(Util.colorLuminance(props.color[0],0.3))});
     overflow:hidden;         
     padding:0.45rem;
+    color:${(props) => props.color[1]?`rgb(${String(props.color[1])})`:'#A7B6CD'};
 `
 const Icon = styled.div`
-    color:#A7B6CD;
     font-size:1.8rem;
     background:none;
     position: absolute;
@@ -23,20 +24,21 @@ const Icon = styled.div`
 `
 const InButton = styled.div`
     position: relative;
-    background:#E8F0FB;
+    background:rgb(${(props) => String(props.color[0])});
     object-fit:cover;
     border-radius:100rem;
     width:100%;
     height:100%;
-    box-shadow: 0 0 6px 2px #fff;
+    box-shadow: 0 0 6px 2px rgb(${(props) => String(Util.colorLuminance(props.color[0],0.3))});
 `
 
 function LargeBasicButton(props) {
+    const {color} = useContext(ColorContext)
     
   return (
       
-     <CircleButtonBlock style={props.pos} onClick={props.onClick}>
-     <InButton>
+     <CircleButtonBlock style={props.pos} onClick={props.onClick} color={color}>
+     <InButton color={color}>
      <Icon>{props.icon}</Icon>
      </InButton>
         </CircleButtonBlock>

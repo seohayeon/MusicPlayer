@@ -1,6 +1,7 @@
-import React,{useState,useEffect,useRef} from 'react';
+import React,{useState,useEffect,useRef,useContext} from 'react';
 import styled from 'styled-components';
-
+import { ColorContext } from '../../ColorContext';
+import { Util } from '../../util/util';
 const ProgressBlock  = styled.div`
     margin-bottom:6rem;
 `
@@ -8,7 +9,7 @@ const RangeBar = styled.input`
     -webkit-appearance: none;
     display:block;
     margin:0 auto;
-    background: #E8F0FB;
+    background: ${(props) => props.color[2]?`rgb(${String(props.color[2])})`:'rgb(142,173,254)'};
     box-shadow: inset 0.1rem 0.1rem 0.2rem  #b6bcc5,
                 inset 0.1rem 0.1rem 0.2rem #ffffff;
     height: 0.6rem;
@@ -26,9 +27,9 @@ const RangeBar = styled.input`
   cursor: -moz-grab;
   cursor: -webkit-grab; 
   border-radius: 50%;
-  background: #9AB6FE;
-  box-shadow:  8px 8px 16px #bdbdbd,
-              -8px -8px 16px #ffffff;
+  background: ${(props) => props.color[2]?`rgb(${String(props.color[2])})`:'rgb(142,173,254)'};
+  box-shadow:  8px 8px 16px rgba(${(props) => String(Util.colorLuminance(props.color[0],-0.3))}),
+              -8px -8px 16px rgba(${(props) => String(Util.colorLuminance(props.color[0],0.3))});
   border:0.8rem solid white;
 }
 `
@@ -54,6 +55,7 @@ function ProgressBar(props) {
     let inputRef = useRef()
     let [current,setCurrent] = useState('00:00')
     let [durate,setDurate] = useState('00:00')
+    const {color} = useContext(ColorContext)
     
     const handleTimeUpdate = () => {
         let el = inputRef.current
@@ -62,7 +64,6 @@ function ProgressBar(props) {
         let percent = currentTime/duration*100
         var value = (percent-el.min)/(el.max-el.min)
         inputRef.current.value = percent
-        setStyle(value)
         setCurrent(toMMSS(currentTime))
         if(durate==duration || isNaN(duration)) return;
         setDurate(toMMSS(duration))
@@ -83,16 +84,9 @@ function ProgressBar(props) {
         let Audio = audio.current
         let el = inputRef.current
         var value = (el.value-el.min)/(el.max-el.min)
-        setStyle(value)
         Audio.currentTime = value * Audio.duration;
     }
     
-    const setStyle = (value) => {
-        let el = inputRef.current
-        el.value=value*100
-        var style = 'background-image: -webkit-gradient(linear, 0% 0%, 100% 0%, color-stop('+ value+', #8EADFE), color-stop('+ value+', #f5f6f8));';
-        el.style = style;
-    }
 
   return (
         <ProgressBlock>
@@ -100,7 +94,7 @@ function ProgressBar(props) {
         <Current>{current}</Current>
         <Durate>{durate}</Durate>
         </TimeBlock>
-        <RangeBar id='range' min="0" max="100" type="range" ref={inputRef} onChange={handleRange}/>
+        <RangeBar id='range' min="0" max="100" type="range" ref={inputRef} onChange={handleRange} color={color}/>
         </ProgressBlock>
       );
 }

@@ -1,13 +1,15 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import styled from 'styled-components';
+import { ColorContext } from '../../ColorContext';
+import { Util } from '../../util/util';
 
 const CircleButtonBlock= styled.div`
     width:3rem;
     height:3rem;
-    background:white;
     border-radius:100%;
-    background: rgb(152,169,255);
-background: radial-gradient(circle, rgba(152,169,255,0.9055555555555556) 0%, rgba(67,113,255,1) 100%);
+    background: radial-gradient(circle, rgba(${(props) => props.color[2]? String(Util.colorLuminance(props.color[2],0.6)):'152,169,255'},0.9055555555555556) 0%, rgba(${(props) => props.color[2]? String(Util.colorLuminance(props.color[2],0)):'67,113,255'},1) 100%);
+    box-shadow: 10px 10px 20px rgba(${(props) => String(Util.colorLuminance(props.color[0],-0.3))}),
+             -10px -10px 20px rgba(${(props) => String(Util.colorLuminance(props.color[0],0.3))});
     display:inline;
     float:right;
     color:white;
@@ -28,10 +30,10 @@ const Icon = styled.div`
 `
 
 function SmallBlueButton(props) {
-    
+    const {color} = useContext(ColorContext)
   return (
       
-     <CircleButtonBlock style={props.pos}>
+     <CircleButtonBlock style={props.pos} color={color}>
      <Icon>{props.icon}</Icon>
         </CircleButtonBlock>
         

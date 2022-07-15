@@ -1,15 +1,16 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import styled from 'styled-components';
+import { ColorContext } from '../../ColorContext';
+import { Util } from '../../util/util';
 
 const CircleButtonBlock= styled.div`
     width:4.5rem;
     height:4.5rem;
     background:white;
     border-radius:100%;
-    background: rgb(152,169,255);
-    background: radial-gradient(circle, rgba(152,169,255,0.9055555555555556) 0%, rgba(67,113,255,1) 100%);
-    box-shadow:  19px 19px 38px #9096a0,
-             -19px -19px 38px #ffffff;
+    background: radial-gradient(circle, rgba(${(props) => props.color[2]? String(Util.colorLuminance(props.color[2],0.6)):'152,169,255'},0.9055555555555556) 0%, rgba(${(props) => props.color[2]? String(Util.colorLuminance(props.color[2],0)):'67,113,255'},1) 100%);
+    box-shadow: 10px 10px 20px rgba(${(props) => String(Util.colorLuminance(props.color[0],-0.3))}),
+             -10px -10px 20px rgba(${(props) => String(Util.colorLuminance(props.color[0],0.3))});
     overflow:hidden;
     padding:0.45rem;
 `
@@ -32,10 +33,10 @@ const InButton = styled.div`
 `
 
 function LargeBlueButton(props) {
-    
+    const {color} = useContext(ColorContext)
   return (
       
-     <CircleButtonBlock style={props.pos} onClick={props.onClick}>
+     <CircleButtonBlock style={props.pos} onClick={props.onClick} color={color}>
      <InButton>
      <Icon>{props.icon}</Icon>
      </InButton>

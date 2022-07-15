@@ -1,24 +1,32 @@
-import React,{useState,useEffect,useRef,} from "react";
+import React,{useState,useEffect,useRef,useContext,} from "react";
 import ReactDOM from "react-dom";
-import styled from 'styled-components'
+import styled,{ createGlobalStyle } from 'styled-components'
 import ArtworkAtom from '../atom/ArtworkAtom'
 import QueueButton from '../atom/QueueButton'
 import SmallBasicButton from '../atom/SmallBasicButton'
 import MidiumBasicButton from '../atom/MidiumBasicButton'
 import MidiumBlueButton from '../atom/MidiumBlueButton'
 import SmallBlueButton from '../atom/SmallBlueButton'
-import {FaPause,FaPlay} from "react-icons/fa"
+import BasicSongBlock from '../atom/BasicSongBlock'
+import SelectSongBlock from '../atom/SelectSongBlock'
 import {TbRepeatOnce,TbRepeat} from "react-icons/tb"
 import {ImShuffle} from "react-icons/im"
 import { usePlayListState } from '../../PlayListContext';
 import { useMusicState,useMusicDispatch } from '../../MusicContext';
-import {Music} from '../../util/database'
-const MusicDB = new Music()
+import { ColorContext } from '../../ColorContext';
+
+import ColorThief from 'color-thief-standalone';
+
+const BodyGlobalStyle = createGlobalStyle`
+  body {
+    background-color: rgb(${(props) => String(props.color[0]) || "223,234,252"});
+    transition: background-color 0.8s;
+  }
+`
 
 const GlobalStyle = styled.div`
-    background: rgb(223,234,252);
-    background: linear-gradient(180deg, rgba(223,234,252,1) 0%, rgba(255,255,255,0.9870370335049099) 100%);
-    background-repeat:no-repeat;
+    background-color: rgb(${(props) => String(props.color[0]) || "223,234,252"});
+    transition: background-color 0.8s;
     overflow:scroll;
     min-height:100vh;
     width:100vw;
@@ -31,6 +39,7 @@ const QueueBlock = styled.div`
     margin-top:5rem;
     width:43rem;
     overflow:scroll;
+    color:${(props) => props.color[1]?`rgb(${String(props.color[1])})`:'#758398'};
 `
 const QueueTop = styled.div`
     display: flex;
@@ -47,7 +56,7 @@ function QueueModal(props){
     let musics = useMusicState()
     const dispatch = useMusicDispatch();
     let audioRef  = useRef();
-    
+    const {color,setColor} = useContext(ColorContext)
     
     useEffect(async () => {
         props.setAudio(audioRef)
@@ -68,40 +77,13 @@ function QueueModal(props){
                 let index = playlist.findIndex((e) => e.id==m.id);
                 let info = playlist[index - 1]
                 if(!info) return;
-                dispatch({
-                    type: 'CHANGE',
-                    music: {
-                        id:info.id,
-                        title:info.title,
-                        artist:info.artist,
-                        artwork:info.artwork
-                    }
-                });
-                let src = playlist.find(e=>e.id === info.id).src
-                audioRef.current.src = src;
-                audioRef.current.load();
-                audioRef.current.play()
-                updateMediaData(info)
-            
+                dpChange(info)
             });
             navigator.mediaSession.setActionHandler('nexttrack', function() {
                 let index = playlist.findIndex((e) => e.id==m.id);
                 let info = playlist[index + 1]
                 if(!info) return;
-                dispatch({
-                    type: 'CHANGE',
-                    music: {
-                        id:info.id,
-                        title:info.title,
-                        artist:info.artist,
-                        artwork:info.artwork
-                    }
-                });
-                let src = playlist.find(e=>e.id === info.id).src
-                audioRef.current.src = src;
-                audioRef.current.load();
-                audioRef.current.play()
-                updateMediaData(info)
+                dpChange(info)
             });
             navigator.mediaSession.setActionHandler('seekbackward', function() {
                 let currentTime = audioRef.current.currentTime
@@ -117,20 +99,7 @@ function QueueModal(props){
     
     const onChangeMusic = async (e, info,i) => {
         e.preventDefault();
-        dispatch({
-            type: 'CHANGE',
-            music: {
-                id:info.id,
-                title:info.title,
-                artist:info.artist,
-                artwork:info.artwork
-            }
-        });
-        let src = playlist.find(e=>e.id === info.id).src
-        audioRef.current.src = src;
-        audioRef.current.load();
-        audioRef.current.play()
-        updateMediaData(info)
+        dpChange(info)
     };
     let [loop,setLoop] = useState(0);
     let [shuffle,setShuffle] = useState(false);
@@ -141,36 +110,11 @@ function QueueModal(props){
             if(loop==1) return;
             if(loop==2&&!info){
                         let m = playlist[0]
-                        dispatch({
-                            type: 'CHANGE',
-                            music: {
-                                id:m.id,
-                                title:m.title,
-                                artist:m.artist,
-                                artwork:m.artwork
-                            }
-                        });
-                        audioRef.current.src = m.src;
-                        audioRef.current.load();
-                        audioRef.current.play()
-                        updateMediaData(m)
+                        dpChange(m)
                         return
             }
             if(loop!==2&&!info) return;
-            dispatch({
-            type: 'CHANGE',
-                music: {
-                    id:info.id,
-                    title:info.title,
-                    artist:info.artist,
-                    artwork:info.artwork
-                }
-            });
-            let src = playlist.find(e=>e.id === info.id).src
-            audioRef.current.src = src;
-            audioRef.current.load();
-            audioRef.current.play()
-            updateMediaData(info)
+            dpChange(info)
     }
     
     const handleLoop = () => {
@@ -198,13 +142,37 @@ function QueueModal(props){
         }
     }
     
-    
-    
+    const dpChange = (info) => {
+        dispatch({
+            type: 'CHANGE',
+                music: {
+                    id:info.id,
+                    title:info.title,
+                    artist:info.artist,
+                    artwork:info.artwork,
+                }
+        });
+        let src = playlist.find(e=>e.id === info.id).src
+        audioRef.current.src = src;
+        audioRef.current.load();
+        audioRef.current.play()
+        updateMediaData(info)
+        
+        const coverImage = new Image();
+        coverImage.src = info.artwork
+        coverImage.onload = () => {
+            const colorThief = new ColorThief();
+            const pal = colorThief.getPalette(coverImage, 2);
+            setColor(pal)
+        }
+    }
     
   return (
+      <>
+        <BodyGlobalStyle color={color}/>
         <div className={open ? 'openModal modal' : 'modal'}>
       {open ? (
-            <GlobalStyle>
+            <GlobalStyle color={color}>
                 <QueueTop>
                 {loop===0?
                 <MidiumBasicButton pos={{
@@ -231,15 +199,12 @@ function QueueModal(props){
                 icon={<ImShuffle/>} onClick={handleShuffle}/>}
                 </QueueTop>
                 
-                <QueueBlock>
+                <QueueBlock color={color}>
                     {playlist.map((element,i) =>
-                        <div className={ select === element.id ? "select_clicked" : "select_default" }
-                            onClick={(e) => {
-                            onChangeMusic(e, element,i)}}>
-                            <QueueButton title={element.title}           artist={element.artist}/>
-                    { select === element.id ? 
-                            <SmallBlueButton icon={<FaPause/>}/>: 
-                            <SmallBasicButton icon={<FaPlay/>}/> }
+                        <div onClick={(e) => { onChangeMusic(e, element,i)}}>
+                    { select === element.id ? <SelectSongBlock title={element.title} artist={element.artist}/>
+                    :<BasicSongBlock title={element.title} artist={element.artist}/>
+                    }
                     </div>
                 )}
                 </QueueBlock>
@@ -252,6 +217,7 @@ function QueueModal(props){
              ref={audioRef}/>
       
     </div>
+    </>
     )
 };
 

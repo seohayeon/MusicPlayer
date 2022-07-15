@@ -8,7 +8,7 @@ const cacheList = [
   '/icon192.jpg',
   '/icon512.jpg'
 ];
-
+/*
 const log = msg => {
   console.log(`[ServiceWorker ${_version}] ${msg}`);
 }
@@ -46,4 +46,4 @@ self.addEventListener('fetch', event => {
       return response || fetch(event.request);
     })
   );
-});
+});*/

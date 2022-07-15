@@ -1,14 +1,16 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import styled from 'styled-components';
+import { ColorContext } from '../../ColorContext';
+import { Util } from '../../util/util';
 
 const AlbumArtBlockDiv = styled.div`
    width: 32rem;
    height:32rem;
    margin:0 auto;
    margin-top:5rem;
-   background: #DDE6F7;
-   box-shadow:  19px 19px 38px #9096a1,
-             -19px -19px 38px #ffffff;
+   background: rgb(${(props) => String(props.color[0])});
+   box-shadow:  19px 19px 38px rgb(${(props) => String(Util.colorLuminance(props.color[0],-0.3))}),
+             -19px -19px 38px rgb(${(props) => String(Util.colorLuminance(props.color[0],0.3))});
    border-radius:100rem;
    padding:0.8rem;
    overflow:hidden;
@@ -21,11 +23,12 @@ const AlbumArt = styled.img`
 `;
 
 function ArtworkAtom(props) {
-    
+    const {color} = useContext(ColorContext)
   return (
     <div>
     <AlbumArtBlockDiv style={props.pos}
-                      onClick={props.onClick}>
+                      onClick={props.onClick}
+                      color={color}>
         <AlbumArt src={props.img}/>
     </AlbumArtBlockDiv>
     </div>
