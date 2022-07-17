@@ -1,6 +1,8 @@
 # react-music-player
 🎧 React music player on vercel
 
-[view DEMO](https://nuesic.vercel.app/)
+![icon](https://raw.githubusercontent.com/seohayeon/MusicPlayer/main/public/logo192.png)
 
-Nuemorphism Style MP3 Player
+[view Demo](https://nuesic.vercel.app/)
+
+Neumorphism Style MP3 Player
