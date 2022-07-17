@@ -8,7 +8,7 @@ import SmallBasicButton from './SmallBasicButton'
 
 const BasicSongDiv = styled.div`
     width:100%;
-    height:6.5rem;
+    height:5.2rem;
     text-align:left;
     position: relative;
 `

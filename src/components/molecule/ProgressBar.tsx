@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { ColorContext } from '../../ColorContext';
 import { Util } from '../../util/util';
 const ProgressBlock  = styled.div`
-    margin-bottom:6rem;
+    margin-bottom:4.8rem;
 `
 const RangeBar = styled.input`
     -webkit-appearance: none;
@@ -12,17 +12,17 @@ const RangeBar = styled.input`
     background: ${(props) => props.color[2]?`rgb(${String(props.color[2])})`:'rgb(142,173,254)'};
     box-shadow: inset 0.1rem 0.1rem 0.2rem  #b6bcc5,
                 inset 0.1rem 0.1rem 0.2rem #ffffff;
-    height: 0.6rem;
-    width: 40rem;
-    border-radius:1rem;
+    height: 0.48rem;
+    width: 32rem;
+    border-radius:0.8rem;
     border-bottom:0.1px solid #b6bcc5;
     :focus{
         outline:none;
     }
 ::-webkit-slider-thumb{
   -webkit-appearance: none;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
   cursor: -moz-grab;
   cursor: -webkit-grab; 
@@ -30,24 +30,26 @@ const RangeBar = styled.input`
   background: ${(props) => props.color[2]?`rgb(${String(props.color[2])})`:'rgb(142,173,254)'};
   box-shadow:  8px 8px 16px rgba(${(props) => String(Util.colorLuminance(props.color[0],-0.3))}),
               -8px -8px 16px rgba(${(props) => String(Util.colorLuminance(props.color[0],0.3))});
-  border:0.8rem solid white;
+  border:0.64rem solid white;
 }
 `
 const Current = styled.span`
     font-family: 'Noto Sans CJK KR';
     float:left;
-    color:#6b7992;
 `
 const Durate = styled.span`
     font-family: 'Noto Sans CJK KR';
     float:right;
-    color:#6b7992;
 `
 const TimeBlock = styled.div`
     display:block;
-    width:39rem;
+    width:31.2rem;
     margin:0 auto;
-    padding-bottom:2.5rem;
+    padding-bottom:2rem;
+    font-size:0.8rem;
+        -webkit-appearance: none;
+    display:block;
+    color:${(props) => props.color[1]?`rgb(${String(props.color[1])})`:'#6b7992'};
 `
 
 function ProgressBar(props) {
@@ -90,7 +92,7 @@ function ProgressBar(props) {
 
   return (
         <ProgressBlock>
-        <TimeBlock>
+        <TimeBlock color={color}>
         <Current>{current}</Current>
         <Durate>{durate}</Durate>
         </TimeBlock>

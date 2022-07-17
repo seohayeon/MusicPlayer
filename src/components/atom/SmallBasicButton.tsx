@@ -4,13 +4,13 @@ import { ColorContext } from '../../ColorContext';
 import { Util } from '../../util/util';
 
 const CircleButtonBlock= styled.div`
-    width:3rem;
-    height:3rem;
+    width:2.6rem;
+    height:2.6rem;
     border-radius:100%;
     box-shadow:  10px 10px 20px rgb(${(props) => String(Util.colorLuminance(props.color[0],-0.3))}),
              -10px -10px 20px rgb(${(props) => String(Util.colorLuminance(props.color[0],0.3))});
     overflow:hidden;         
-    padding:0.3rem;
+    padding:0.24rem;
     color:${(props) => props.color[1]?`rgb(${String(props.color[1])})`:'#A7B6CD'};
     display:inline;
     float:right;
@@ -20,7 +20,7 @@ const CircleButtonBlock= styled.div`
     transform:translate(-50%, -50%);
 `
 const Icon = styled.div`
-    font-size:1rem;
+    font-size:0.8rem;
     background:none;
     position: absolute;
     top: 50%;
@@ -31,7 +31,7 @@ const InButton = styled.div`
     position: relative;
     background:rgb(${(props) => String(props.color[0])});
     object-fit:cover;
-    border-radius:100rem;
+    border-radius:50%;
     width:100%;
     height:100%;
     box-shadow: 0 0 6px 2px rgb(${(props) => String(Util.colorLuminance(props.color[0],0.3))});

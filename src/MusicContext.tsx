@@ -1,6 +1,6 @@
 import React, { useReducer, createContext, useContext } from 'react';
 import { usePlayListState } from './PlayListContext'
-const initialMusic = {title:'-----',artist:'---',artwork:'images/unknown_music.png',color:['223,234,252']}
+const initialMusic = {title:'---',artist:'---',artwork:'images/unknown_music.png',color:['223,234,252']}
 const MusicStateContext = createContext();
 const MusicDispatchContext = createContext();
 

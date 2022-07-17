@@ -117,4 +117,76 @@ background: radial-gradient(circle, rgba(152,169,255,0.9055555555555556) 0%, rgb
 input[type="file"]{
     display: none;
 }
+.oriEffect{
+    animation: 30s linear 0s infinite normal forwards running OriKey;
+}
+.cloneEffect{
+    animation: 30s linear 0s infinite normal none running CloneKey;
+}
+@keyframes OriKey{
+    0% {
+        transform: translateX(0);
+    }
+    10% {
+        transform: translateX(0);
+    }
+    
+    50% {
+        transform: translateX(-100%);
+    }
+    50.01%{
+        transform: translateX(100%);
+    }
+    100%{
+        transform: translateX(0);
+    }
+}
+@keyframes CloneKey{
+    0% {
+        transform: translateX(0);
+    }
+    10% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-200%);
+    }
+}
 
+#loop{
+    margin-right: 1.6rem;
+    margin-top: 3.2rem;
+}
+#shuffle{
+    margin-left: 1.6rem;
+    margin-top: 3.2rem;
+}
+@media all and (min-width:1024px) { 
+    #artwork{
+        float:left;
+    } 
+    .musicInfo{
+        float: left;
+        padding-left:4rem;
+    }
+    #wrap{
+        padding: 3.5rem 3rem 3.5rem 3rem;
+        overflow: hidden;
+        width:1024px;
+        margin: 0 auto;
+        margin-top: -37.87rem;
+    }
+    #title{
+        margin-top:2rem;
+    }
+    #subArtwork{
+        float:left;
+    }
+    #loop{
+        float:left;
+        margin-left:3rem;
+    }
+    #shuffle{
+        float:left;
+    }
+} 

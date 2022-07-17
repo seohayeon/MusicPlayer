@@ -22,9 +22,7 @@ function App(){
       <ColorProvider>
         <TopBarBlock setAudio={setAudio}/>
         <MusicInfoBlock title='Lose it' 
-                     artist='Flume ft. Vic Mensa'/>
-        <ProgressBar audio={audio}/>
-        <ControllBlock audio={audio}/>
+                     artist='Flume ft. Vic Mensa' audio={audio}/>
         </ColorProvider>
       </MusicProvider>
       </PlayListProvider>

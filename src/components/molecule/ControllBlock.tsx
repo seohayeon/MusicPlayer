@@ -11,7 +11,7 @@ import ColorThief from 'color-thief-standalone';
 const ControllBlokDiv= styled.div`
     display: flex;
     align-items: center;
-    justify-content: center;   
+    justify-content: center;
 `
 
 function ControllBlock(props) {
@@ -113,7 +113,7 @@ function ControllBlock(props) {
   return (
         <ControllBlokDiv>
             <LargeBasicButton icon={<FaBackward/>} onClick={handlePrev}/>
-            <LargeBlueButton pos={{'marginLeft':'2.5rem','marginRight':'2.5rem'}} icon={paused?<FaPlay/>:<FaPause/>} onClick={handlePause}/>
+            <LargeBlueButton pos={{'marginLeft':'2rem','marginRight':'2rem'}} icon={paused?<FaPlay/>:<FaPause/>} onClick={handlePause}/>
             <LargeBasicButton icon={<FaForward/>} onClick={handleNext}/>
         </ControllBlokDiv>
       );

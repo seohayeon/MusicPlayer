@@ -2,15 +2,15 @@ import React from "react";
 import styled from 'styled-components'
 
 const Title = styled.div`
-    margin-left:1rem;
-    margin-top:1.3rem;
-    font-size:1.5rem;
+    margin-left:0.8rem;
+    margin-top:1.04rem;
+    font-size:1.2rem;
     font-family: 'Noto Sans CJK KR';
 `
 const Artist = styled.div`
-    margin-left:1rem;
-    margin-top:0.3rem;
-    font-size:1rem;
+    margin-left:0.8rem;
+    margin-top:0.24rem;
+    font-size:0.8rem;
     font-family: 'Noto Sans CJK KR';
 `
 const SongInfo = styled.div`

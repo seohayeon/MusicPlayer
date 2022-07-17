@@ -4,8 +4,8 @@ import { ColorContext } from '../../ColorContext';
 import { Util } from '../../util/util';
 
 const CircleButtonBlock= styled.div`
-    width:3rem;
-    height:3rem;
+    width:2.4rem;
+    height:2.4rem;
     border-radius:100%;
     background: radial-gradient(circle, rgba(${(props) => props.color[2]? String(Util.colorLuminance(props.color[2],0.6)):'152,169,255'},0.9055555555555556) 0%, rgba(${(props) => props.color[2]? String(Util.colorLuminance(props.color[2],0)):'67,113,255'},1) 100%);
     box-shadow: 10px 10px 20px rgba(${(props) => String(Util.colorLuminance(props.color[0],-0.3))}),
@@ -13,7 +13,7 @@ const CircleButtonBlock= styled.div`
     display:inline;
     float:right;
     color:white;
-    padding:0.45rem;
+    padding:0.36rem;
     position:absolute;
     right:0%;
     top:50%;
@@ -21,7 +21,7 @@ const CircleButtonBlock= styled.div`
 `
 const Icon = styled.div`
     color:#fff;
-    font-size:1.2rem;
+    font-size:0.96rem;
     background:none;
     position: absolute;
     top: 50%;

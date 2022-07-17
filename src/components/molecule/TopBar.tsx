@@ -8,27 +8,28 @@ import {FaPlus} from "react-icons/fa"
 import { usePlayListDispatch, usePlayListNextId } from '../../PlayListContext';
 
 const TopBarDiv= styled.div`
-    margin-top:2rem;
-    height:3rem;
+    margin-top:1.6rem;
+    height:5rem;
     text-align:center;
 `
 const TopText = styled.span`
     color:#6b7992;
-    font-size:1.25rem;
+    font-size:1rem;
     font-family: 'Noto Sans CJK KR';
 `
 
 function TopBarBlock(props) {
-    
     const [modalOpen, setModalOpen] = useState(false);
     const dispatch = usePlayListDispatch()
     const nextId = usePlayListNextId()
-    const handleQueueBtn = () => {
+    const handleQueueBtn = (e) => {
+        e.stopPropagation()
         setModalOpen(true);
     }
     const closeModal = () => {
     setModalOpen(false);
     };
+    document.body.addEventListener('click', closeModal);
     const [audio,setAudio] = useState()
     props.setAudio(audio)
 

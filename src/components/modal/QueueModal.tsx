@@ -21,7 +21,12 @@ const BodyGlobalStyle = createGlobalStyle`
   body {
     background-color: rgb(${(props) => String(props.color[0]) || "223,234,252"});
     transition: background-color 0.8s;
-  }
+}
+    @media all and (max-width:479px) {
+        html{
+            font-size:12px;
+        }
+    }
 `
 
 const GlobalStyle = styled.div`
@@ -33,21 +38,49 @@ const GlobalStyle = styled.div`
     position:absolute;
     z-index:3;
     top:0;
+    @media all and (min-width:1024px) { 
+        width:36.5rem;
+        right:0;
+        background-color: rgba(${(props) => String(props.color[0]) || "223,234,252"});
+    }
 `
 const QueueBlock = styled.div`
     margin:0 auto;
-    margin-top:5rem;
-    width:43rem;
+    margin-top:4rem;
+    width:34.5rem;
     overflow:scroll;
     color:${(props) => props.color[1]?`rgb(${String(props.color[1])})`:'#758398'};
-    height:calc(100vh - 28rem);
+    height:calc(100vh - 22.5rem);
+    @media all and (max-width:479px) {
+        width:100vw;
+    }
+    @media all and (min-width:1024px) { 
+        height:calc(100vh - 10rem);
+        float:right;
+        margin-right:1rem;
+        margin-top:0rem;
+    }
+`
+const PlaylistCont = styled.div`
+    display:none;
+    @media all and (min-width:1024px) { 
+        display:block;
+        overflow:hidden;
+        padding-bottom:3rem;
+    }
 `
 const QueueTop = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-around;   
-    width:43rem;
+    width:34.5rem;
     margin:0 auto;
+    @media all and (max-width:479px) {
+        width:100vw;
+    }
+    @media all and (min-width:1024px) { 
+        display:none;
+    }
 `
 
 function QueueModal(props){
@@ -167,40 +200,51 @@ function QueueModal(props){
             setColor(pal)
         }
     }
-    
+    const innerModal = (e) => {
+        e.stopPropagation()
+    }
   return (
       <>
         <BodyGlobalStyle color={color}/>
-        <div className={open ? 'openModal modal' : 'modal'}>
+        <div className={open ? 'openModal modal' : 'modal'} onClick={innerModal}>
       {open ? (
             <GlobalStyle color={color}>
-                <QueueTop>
+                <QueueTop id='subArtwork'>
                 {loop===0?
-                <MidiumBasicButton pos={{
-                'marginRight':'2rem',
-                'marginTop':'4rem'
-                }}
+                <MidiumBasicButton id='loop' 
                 icon={<TbRepeat/>}
                 onClick={handleLoop}/>
-                :<MidiumBlueButton pos={{
-                'marginRight':'2rem',
-                'marginTop':'4rem'
-                }}
+                :<MidiumBlueButton id='loop'
                 icon={loop===1?<TbRepeatOnce/>:<TbRepeat/>}
                 onClick={handleLoop}/>}
                 <ArtworkAtom pos={{
-                'width':'16rem',
-                'height':'16rem',
-                'padding':'0.5rem'    
+                'width':'12.8rem',
+                'height':'12.8rem',
+                'padding':'0.4rem',
+                'marginTop':'4rem'
                 }} onClick={close} img={musics.artwork}/>
                 {shuffle?
-                <MidiumBlueButton pos={{'marginLeft':'2rem','marginTop':'4rem'}}
+                <MidiumBlueButton id='shuffle'
                 icon={<ImShuffle/>} onClick={handleShuffle}/>
-                :<MidiumBasicButton pos={{'marginLeft':'2rem','marginTop':'4rem'}}
+                :<MidiumBasicButton id='shuffle'
                 icon={<ImShuffle/>} onClick={handleShuffle}/>}
                 </QueueTop>
-                
-                <QueueBlock color={color}>
+                <PlaylistCont>
+                    {loop===0?
+                <MidiumBasicButton id='loop' 
+                icon={<TbRepeat/>}
+                onClick={handleLoop}/>
+                :<MidiumBlueButton id='loop'
+                icon={loop===1?<TbRepeatOnce/>:<TbRepeat/>}
+                onClick={handleLoop}/>}
+                {shuffle?
+                <MidiumBlueButton id='shuffle'
+                icon={<ImShuffle/>} onClick={handleShuffle}/>
+                :<MidiumBasicButton id='shuffle'
+                icon={<ImShuffle/>} onClick={handleShuffle}/>}
+                    </PlaylistCont>
+                <QueueBlock className='queueBlock' color={color}>
+                    
                     {playlist.map((element,i) =>
                         <div onClick={(e) => { onChangeMusic(e, element,i)}}>
                     { select === element.id ? <SelectSongBlock title={element.title} artist={element.artist}/>
