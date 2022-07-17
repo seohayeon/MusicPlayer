@@ -10,8 +10,6 @@ const RangeBar = styled.input`
     display:block;
     margin:0 auto;
     background: ${(props) => props.color[2]?`rgb(${String(props.color[2])})`:'rgb(142,173,254)'};
-    box-shadow: inset 0.1rem 0.1rem 0.2rem  #b6bcc5,
-                inset 0.1rem 0.1rem 0.2rem #ffffff;
     height: 0.48rem;
     width: 32rem;
     border-radius:0.8rem;
